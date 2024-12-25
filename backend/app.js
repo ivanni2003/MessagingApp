@@ -1,19 +1,15 @@
 const express = require("express")
 const app = express()
-const db = require("./db/queries");
-
-app.use(express.json());
+const cors = require('cors')
 require("dotenv").config()
 
-app.get("/", async (req, res) => {
-    const rows = await db.getAllUsernames();
-    console.log(rows)
-})
+const userRouter = require('./routes/userRouter')
 
-app.post("/new", async (req, res) => {
-    db.insertUsername(req.body.username)
-    res.send(req.body.username)
-})
+app.use(cors())
+app.use(express.json());
+
+app.use('/api/users', userRouter)
+
 
 const PORT = process.env.PORT
 

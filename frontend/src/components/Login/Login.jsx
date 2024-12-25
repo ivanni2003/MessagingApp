@@ -1,4 +1,7 @@
+import axios from 'axios';
 import { useState } from "react";
+
+const baseURL = 'http://localhost:3000'
 
 const Login = ({user, handleLoginSuccess}) => {
     const [username, setUsername] = useState('')
@@ -12,14 +15,24 @@ const Login = ({user, handleLoginSuccess}) => {
         setPassword(e.target.value)
     }
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault()
-        console.log("register")
+
+        const reqData = {username, password}
+        console.log(password)
+
+        try {
+          await axios.post(`${baseURL}/api/users/register`, reqData)
+          console.log(added)
+        } catch (error) {
+          console.log(error)
+        }
+       
     }
 
     const handleLogin = (e) => {
         e.preventDefault()
-        console.log('login')
+        console.log(username + password + 'added')
     }
 
     return (
