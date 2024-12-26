@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const baseURL = 'http://localhost:3000'
 
-const Login = ({user, handleLoginSuccess}) => {
+const Login = ({handleLoginSuccess}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -17,22 +17,40 @@ const Login = ({user, handleLoginSuccess}) => {
 
     const handleRegister = async (e) => {
         e.preventDefault()
-
         const reqData = {username, password}
-        console.log(password)
-
+        
         try {
-          await axios.post(`${baseURL}/api/users/register`, reqData)
-          console.log(added)
+          const response = await axios.post(`${baseURL}/api/users/register`, reqData)
+          const userData = response.data
+
+          handleLoginSuccess(userData)
+          window.localStorage.setItem(
+            'loggedUser', JSON.stringify(userData)
+          )
         } catch (error) {
           console.log(error)
+          alert('Username already in use.')
         }
        
     }
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault()
-        console.log(username + password + 'added')
+        const reqData = {username, password}
+
+        try {
+          const response = await axios.post(`${baseURL}/api/users/login`, reqData)
+          const userData = response.data
+
+          handleLoginSuccess(userData)
+          window.localStorage.setItem(
+            'loggedUser', JSON.stringify(userData)
+          )
+        } catch (error) {
+          console.log(error)
+          alert('Invalid username/password.')
+        }
+
     }
 
     return (
