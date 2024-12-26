@@ -1,7 +1,2 @@
-POST http://localhost:3000/api/users/login
+GET http://localhost:3000/api/profiles/7
 Content-Type: application/json
-
-{
-  "username": "Piccon",
-  "password": "Daima"
-}

@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation, Outlet } from 'react-router-dom'
+import axios from 'axios'
 import './App.css'
 
 import Login from './components/Login/Login'
 import NavBar from './components/NavBar/NavBar'
+
+const baseURL = 'http://localhost:3000'
 
 const App = () => {
   const [userData, setUserData] = useState(null)
@@ -33,6 +36,22 @@ const App = () => {
     navigate('/');
   }
 
+  const handleDeleteAccount = async () => {
+    try {
+      await axios.delete(`${baseURL}/api/users/delete/${userData.id}`)
+
+      alert('Account Deleted Successfully')
+
+      window.localStorage.removeItem('loggedUser') 
+      setUserData(null)
+      navigate('/');
+
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
   return (
     <div>
       <h1 className="main-header">Social Media App</h1>
@@ -40,8 +59,8 @@ const App = () => {
         <Login handleLoginSuccess={handleLoginSuccess} />
       ) : (
         <div>
-          <Outlet /> 
-          <NavBar handleLogout={handleLogout} />
+          <Outlet context={userData}/> 
+          <NavBar handleLogout={handleLogout} handleDeleteAccount={handleDeleteAccount} />
         </div>
       )}
     </div>

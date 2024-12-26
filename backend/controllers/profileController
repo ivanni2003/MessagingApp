@@ -1,0 +1,34 @@
+const db = require("../db/queries");
+
+const jwt = require('jsonwebtoken')
+
+// Note: token authentication
+
+async function getUserProfile(req, res) { // note send entire user obj in body (for token)
+    try {
+
+        const userProfile = await db.getProfile(req.params.id)
+        res.status(200).json({fullName: userProfile.full_name, location: userProfile.location, bio: userProfile.bio})
+    } catch (error) {
+        res.status(400).send('Error getting user profile data')
+    }
+}
+
+async function updateUserName(req, res) {  // note send entire user obj + new name
+
+}
+
+async function updateUserLocation(req, res) {  // note send entire user obj + new location
+
+}
+
+async function updateUserBio(req, res) {  // note send entire user obj + new bio
+
+}
+
+module.exports = {
+    getUserProfile,
+    updateUserName,
+    updateUserLocation,
+    updateUserBio
+}
