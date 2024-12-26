@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { useState } from "react";
+import axios from 'axios'
+import { useState } from "react"
 
 const baseURL = 'http://localhost:3000'
 
@@ -9,7 +9,6 @@ const Login = ({handleLoginSuccess}) => {
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value)
-        console.log(username)
     }
     const handlePasswordChange = (e) => {
         setPassword(e.target.value)
@@ -24,9 +23,7 @@ const Login = ({handleLoginSuccess}) => {
           const userData = response.data
 
           handleLoginSuccess(userData)
-          window.localStorage.setItem(
-            'loggedUser', JSON.stringify(userData)
-          )
+    
         } catch (error) {
           console.log(error)
           alert('Username already in use.')
@@ -43,9 +40,7 @@ const Login = ({handleLoginSuccess}) => {
           const userData = response.data
 
           handleLoginSuccess(userData)
-          window.localStorage.setItem(
-            'loggedUser', JSON.stringify(userData)
-          )
+        
         } catch (error) {
           console.log(error)
           alert('Invalid username/password.')
