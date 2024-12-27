@@ -6,9 +6,6 @@ import App from './App'
 import Profile from './views/Profile/Profile'
 import Search from './views/Search/Search'
 import Messages from './views/Messages/Messages'
-import Posts from './views/Posts/Posts'
-
-import EditProfile from './views/EditProfile/EditProfile';
 
 
 const router = createBrowserRouter([
@@ -18,8 +15,7 @@ const router = createBrowserRouter([
      children: [ 
       { path: "profile", element: <Profile /> }, 
       { path: "search", element: <Search /> },
-      { path: "messages", element: <Messages />},
-      { path: "posts", element: <Posts />}
+      { path: "messages", element: <Messages />}
     ],
   }
 ]);

@@ -15,19 +15,6 @@ const App = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const handleLoginSuccess = (userObj) => {
-    setUserData(userObj)
-
-    const authHeader = {
-      headers: { Authorization: 'Bearer ' + userObj.userToken },
-    }
-    setAuthHeader(authHeader)
-    window.localStorage.setItem(
-      'loggedUser', JSON.stringify(userObj)
-    )
-    navigate('/profile');
-  }
-
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')  // saving session
     if (loggedUser) {
@@ -40,6 +27,19 @@ const App = () => {
       setAuthHeader(authHeader)
     }
   }, [])
+
+  const handleLoginSuccess = (userObj) => {
+    setUserData(userObj)
+
+    const authHeader = {
+      headers: { Authorization: 'Bearer ' + userObj.userToken },
+    }
+    setAuthHeader(authHeader)
+    window.localStorage.setItem(
+      'loggedUser', JSON.stringify(userObj)
+    )
+    navigate('/profile');
+  }
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser') 

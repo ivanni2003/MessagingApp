@@ -1,4 +1,3 @@
-GET http://localhost:3000/api/profiles/profile
+GET http://localhost:3000/api/profiles/other
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsInVzZXJuYW1lIjoiR2lueXUiLCJpYXQiOjE3MzUyNjQ3NzUsImV4cCI6MTczNTI2ODM3NX0.2UaDm1gZ3CvGt77zjROYZs814evDArQoY1dmRXyuODA
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsInVzZXJuYW1lIjoiR2lueXUiLCJpYXQiOjE3MzUzMjMyMDgsImV4cCI6MTczNTMyNjgwOH0.Pal4QOJYvoiQUSX90EVh7YQokOi5REShqPntbLXtNW8

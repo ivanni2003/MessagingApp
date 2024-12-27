@@ -5,7 +5,7 @@ async function getUserProfile(req, res) { // note send entire user obj in body (
     try {
         const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)
         if (!decodedToken.id) {
-            return response.status(401).json({ error: 'Invalid Token' })
+            return res.status(401).json({ error: 'Invalid Token' })
         }
 
         const userProfile = await db.getProfile(decodedToken.id)
@@ -19,7 +19,7 @@ async function updateUserName(req, res) {  // updates & sends updated profile
     try {
         const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)
         if (!decodedToken.id) {
-            return response.status(401).json({ error: 'Invalid Token' })
+            return res.status(401).json({ error: 'Invalid Token' })
         }
 
         await db.updateName(req.body.newName, decodedToken.id)
@@ -35,7 +35,7 @@ async function updateUserLocation(req, res) {  // updates & sends updated profil
     try {
         const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)
         if (!decodedToken.id) {
-            return response.status(401).json({ error: 'Invalid Token' })
+            return res.status(401).json({ error: 'Invalid Token' })
         }
 
         await db.updateLocation(req.body.newLocation, decodedToken.id)
@@ -51,7 +51,7 @@ async function updateUserBio(req, res) {  // updates & sends updated profile
     try {
         const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)
         if (!decodedToken.id) {
-            return response.status(401).json({ error: 'Invalid Token' })
+            return res.status(401).json({ error: 'Invalid Token' })
         }
 
         await db.updateBio(req.body.newBio, decodedToken.id)
@@ -63,9 +63,24 @@ async function updateUserBio(req, res) {  // updates & sends updated profile
     }
 }
 
+async function getOtherUsers(req, res) {  // gets users other than requester
+    try {
+        const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)
+        if (!decodedToken.id) {
+            return response.status(401).json({ error: 'Invalid Token' })
+        }
+        const otherUsers = await db.findOtherUsers(decodedToken.id)
+        res.status(200).json({otherUsers})
+        
+    } catch (error) {
+        res.status(400).send('Error fetching other users')
+    }
+}
+
 module.exports = {
     getUserProfile,
     updateUserName,
     updateUserLocation,
-    updateUserBio
+    updateUserBio,
+    getOtherUsers
 }

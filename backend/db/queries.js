@@ -37,22 +37,27 @@ async function deleteProfile(user_id) {
     await pool.query("DELETE FROM profiles WHERE user_id = $1", [user_id])
 }
 
-async function getProfile(user_id) {    // pass in token if needed
+async function getProfile(user_id) {   
     const result = await pool.query("SELECT DISTINCT * FROM profiles WHERE user_id = $1", [user_id])
 
     return result.rows[0]
 }
 
-async function updateName(newName, user_id) {   // pass in token if needed
+async function updateName(newName, user_id) {  
     await pool.query("UPDATE profiles SET full_name = $1 WHERE user_id = $2", [newName, user_id])
 }
 
-async function updateLocation(newLocation, user_id) {    // pass in token if needed
+async function updateLocation(newLocation, user_id) {    
     await pool.query("UPDATE profiles SET location = $1 WHERE user_id = $2", [newLocation, user_id])
 }
 
-async function updateBio(newBio, user_id) {   // pass in token if needed
+async function updateBio(newBio, user_id) {   
     await pool.query("UPDATE profiles SET bio = $1 WHERE user_id = $2", [newBio, user_id])
+}
+
+async function findOtherUsers(user_id) {  // returns data for other user cards
+    const result = await pool.query("SELECT user_id, username, full_name, location, bio FROM profiles INNER JOIN users ON user_id = id WHERE user_id != $1", [user_id])
+    return result.rows
 }
   
 module.exports = {
@@ -65,5 +70,6 @@ module.exports = {
     getProfile,
     updateName,
     updateLocation,
-    updateBio
+    updateBio,
+    findOtherUsers
 };
