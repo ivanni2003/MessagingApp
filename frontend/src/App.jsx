@@ -35,7 +35,7 @@ const App = () => {
       setUserData(userData)
 
       const authHeader = {
-        headers: { Authorization: 'Bearer ' + loggedUser.userToken },
+        headers: { Authorization: 'Bearer ' + userData.userToken },
       }
       setAuthHeader(authHeader)
     }
@@ -74,8 +74,8 @@ const App = () => {
         <Login handleLoginSuccess={handleLoginSuccess} />
       ) : (
         <div>
-          <Outlet context={{userData, authHeader}}/> 
           <NavBar handleLogout={handleLogout} handleDeleteAccount={handleDeleteAccount} />
+          <Outlet context={{userData, authHeader}}/> 
         </div>
       )}
     </div>

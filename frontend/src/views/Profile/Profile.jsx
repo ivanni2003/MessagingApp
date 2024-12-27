@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import './Profile.css'
 
+import EditProfile from '../../views/EditProfile/EditProfile'
+
 const baseURL = 'http://localhost:3000'
 
 const Profile = () => {
@@ -10,11 +12,12 @@ const Profile = () => {
     const [fullName, setFullName] = useState('')
     const [location, setLocation] = useState('')
     const [bio, setBio] = useState('')
+    const [editProfile, setEditProfile] = useState(false)
+
 
     useEffect(() => {
         const fetchProfileData = async () => {
           try {
-        
             const response = await axios.get(`${baseURL}/api/profiles/profile`, authHeader)
             const profileData = response.data
 
@@ -30,28 +33,55 @@ const Profile = () => {
 
     }, [])  
 
-    
-    const handleNameChange = () => {
-        console.log('change name')
+    const handleNameChange = async (newName) => {
+        const response = await axios.patch(`${baseURL}/api/profiles/update/name`, {newName}, authHeader)
+        const newProfileData = response.data
+
+        setFullName(newProfileData.fullName)
+
+        alert('Name changed successfully')
     }
-    const handleLocationChange = () => {
-        console.log('change location')
+    const handleLocationChange = async (newLocation) => {
+        const response = await axios.patch(`${baseURL}/api/profiles/update/location`, {newLocation}, authHeader)
+        const newProfileData = response.data
+
+        setLocation(newProfileData.location)
+
+        alert('Location changed successfully')
     }
-    const handleBioChange = () => {
-        console.log('change bio')
+    const handleBioChange = async (newBio) => {
+        const response = await axios.patch(`${baseURL}/api/profiles/update/bio`, {newBio}, authHeader)
+        const newProfileData = response.data
+
+        setBio(newProfileData.bio)
+
+        alert('Bio changed successfully')
     }
+
+    const handleProfileReturn = () => setEditProfile(false)
+
 
     return (
         <div>
-            <h2>Your Profile: {userData.username}</h2>
+          {!editProfile ? (
             <div>
+              <h2>Your Profile: {userData.username}</h2>
+              <div>
                 <p>Name: {fullName}</p>
-                <button onClick={handleNameChange}>Edit Name</button>
                 <p>Location: {location}</p>
-                <button onClick={handleLocationChange}>Edit Location</button>
                 <p>Bio: {bio}</p>
-                <button onClick={handleBioChange}>Edit Bio</button>
+                <button onClick={() => setEditProfile(true)}>Edit Profile</button>
+              </div>
             </div>
+          ) : (
+            <EditProfile 
+                handleNameChange={handleNameChange} 
+                handleLocationChange={handleLocationChange} 
+                handleBioChange={handleBioChange} 
+                handleProfileReturn={handleProfileReturn}
+                userData={userData} 
+                authHeader={authHeader}/>
+          )}
         </div>
     )
 }
