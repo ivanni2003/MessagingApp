@@ -4,6 +4,6 @@ const userRouter = express.Router();
 
 userRouter.post('/register', createAccount)
 userRouter.post('/login', login)
-userRouter.delete('/delete/:id', deleteAccount)
+userRouter.delete('/delete', deleteAccount)
 
 module.exports = userRouter;

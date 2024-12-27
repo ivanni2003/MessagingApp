@@ -17,11 +17,11 @@ async function createAccount(req, res) {
         username: userObj.username
     }
 
-    const userToken = jwt.sign(userForToken, process.env.SECRET)
+    const userToken = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 3600 })
 
     db.createProfile(userObj.id)
 
-    res.status(201).send({userToken, id: userObj.id, username: userObj.username});
+    res.status(201).send({userToken, username: userObj.username});
 }
 
 async function login(req, res) {
@@ -43,9 +43,9 @@ async function login(req, res) {
         username: userObj.username
     }
 
-    const userToken = jwt.sign(userForToken, process.env.SECRET)
+    const userToken = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 3600 })
 
-    res.status(200).json({userToken, id: userObj.id, username: userObj.username})
+    res.status(200).json({userToken, username: userObj.username})
     } catch (error) {
         res.status(400).send(error)
     }
@@ -54,8 +54,13 @@ async function login(req, res) {
 
 async function deleteAccount(req, res) {
     try {
-        await db.deleteUser(req.params.id)
-        await db.deleteProfile(req.params.id)
+        const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)
+        if (!decodedToken.id) {
+            return response.status(401).json({ error: 'Invalid Token' })
+        }
+
+        await db.deleteUser(decodedToken.id)
+        await db.deleteProfile(decodedToken.id)
         res.status(201).send('Account Deleted')
     } catch (error) {
         res.status(400).send(error)

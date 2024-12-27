@@ -20,9 +20,8 @@ const Login = ({handleLoginSuccess}) => {
         
         try {
           const response = await axios.post(`${baseURL}/api/users/register`, reqData)
-          const userData = response.data
-
-          handleLoginSuccess(userData)
+    
+          handleLoginSuccess(response.data)
     
         } catch (error) {
           console.log(error)
@@ -37,9 +36,8 @@ const Login = ({handleLoginSuccess}) => {
 
         try {
           const response = await axios.post(`${baseURL}/api/users/login`, reqData)
-          const userData = response.data
 
-          handleLoginSuccess(userData)
+          handleLoginSuccess(response.data)
         
         } catch (error) {
           console.log(error)

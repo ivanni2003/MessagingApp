@@ -10,12 +10,18 @@ const baseURL = 'http://localhost:3000'
 
 const App = () => {
   const [userData, setUserData] = useState(null)
+  const [authHeader, setAuthHeader] = useState(null)
 
   const navigate = useNavigate()
   const location = useLocation()
 
   const handleLoginSuccess = (userObj) => {
     setUserData(userObj)
+
+    const authHeader = {
+      headers: { Authorization: 'Bearer ' + userObj.userToken },
+    }
+    setAuthHeader(authHeader)
     window.localStorage.setItem(
       'loggedUser', JSON.stringify(userObj)
     )
@@ -27,12 +33,18 @@ const App = () => {
     if (loggedUser) {
       const userData = JSON.parse(loggedUser)
       setUserData(userData)
+
+      const authHeader = {
+        headers: { Authorization: 'Bearer ' + loggedUser.userToken },
+      }
+      setAuthHeader(authHeader)
     }
   }, [])
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser') 
     setUserData(null)
+    setAuthHeader(null)
     navigate('/');
   }
 
@@ -43,7 +55,10 @@ const App = () => {
       alert('Account Deleted Successfully')
 
       window.localStorage.removeItem('loggedUser') 
+
       setUserData(null)
+      setAuthHeader(null)
+
       navigate('/');
 
     } catch (error) {
@@ -59,7 +74,7 @@ const App = () => {
         <Login handleLoginSuccess={handleLoginSuccess} />
       ) : (
         <div>
-          <Outlet context={userData}/> 
+          <Outlet context={{userData, authHeader}}/> 
           <NavBar handleLogout={handleLogout} handleDeleteAccount={handleDeleteAccount} />
         </div>
       )}

@@ -5,6 +5,7 @@ const NavBar = ({handleLogout, handleDeleteAccount}) => {
     const navigate = useNavigate()
     return (
         <div className='nav-options'>
+          <h2>NavBar</h2>
           <button onClick={handleLogout}>Log Out</button>
           <button onClick={handleDeleteAccount}>Delete Account</button>
           <button onClick={() => navigate('/profile')}>Profile</button>

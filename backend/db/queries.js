@@ -2,6 +2,14 @@ const pool = require("./pool");
 
 const bcrypt = require('bcrypt')
 
+function getTokenFromHeader(req) {
+    const authorization = req.get('authorization')
+    if (authorization && authorization.startsWith('Bearer ')) {
+      return authorization.replace('Bearer ', '')
+    }
+    return null
+}
+
 // user table
 async function createUser(username, password) {
     const passwordHash = await bcrypt.hash(password, 10)
@@ -48,6 +56,7 @@ async function updateBio(newBio, user_id) {   // pass in token if needed
 }
   
 module.exports = {
+    getTokenFromHeader,
     createUser,
     findUser,
     deleteUser,
