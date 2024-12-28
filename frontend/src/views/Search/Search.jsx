@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom'
 import axios from 'axios'
 
 import UserCard from '../../components/UserCard/UserCard'
+import SearchBar from '../../components/SearchBar/SearchBar'
 
 const baseURL = 'http://localhost:3000'
 
@@ -26,17 +27,7 @@ const Search = () => {
     return (
         <div>
           <h2>Search for other Users</h2>
-          <ul>
-            {otherUsers && otherUsers.length > 0 ? (
-              otherUsers.map((userData, index) => (
-                <li key={index}>
-                  <UserCard userData={userData} />
-                </li>
-              ))
-            ) : (
-              <li>No other users found</li>
-            )}
-          </ul>
+          <SearchBar users={otherUsers} />
         </div>
     )
 }

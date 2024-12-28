@@ -1,15 +1,17 @@
 import { useState } from 'react'
 
+import UserPopUp from '../UserPopUp/UserPopUp'
+
 import './UserCard.css'
 
 const UserCard = ({userData}) => {
+    const [popUpVisible, setPopUpVisible] = useState(false)
+
     return (
         <div>
-            <p>{userData.username}</p>
-            <p>{userData.full_name}</p>
-            <p>{userData.location}</p>
-            <p>{userData.bio}</p>
-            <button>Message</button>
+            <p>{userData.username + ': ' + userData.full_name}</p>
+            <UserPopUp userData={userData} isVisible={popUpVisible} />
+            <button onClick={() => setPopUpVisible(!popUpVisible)}>View</button>
         </div>
     )
 }
