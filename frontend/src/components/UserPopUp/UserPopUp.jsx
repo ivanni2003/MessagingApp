@@ -4,7 +4,7 @@ import SendMessage from '../SendMessage/SendMessage'
 
 import { useState } from 'react'
 
-const UserPopUp = ({userData, isVisible}) => {
+const UserPopUp = ({otherUserData, isVisible, authHeader}) => {
     const [conversationVisible, setConversationVisible] = useState(false)
 
     const handleMessage = () => {
@@ -17,10 +17,10 @@ const UserPopUp = ({userData, isVisible}) => {
         <div>
             { isVisible && !conversationVisible && (
                 <div> 
-                    <h1>{'Profile: ' + userData.username}</h1>
-                    <p>{'Name: ' + userData.full_name}</p>
-                    <p>{'Location: ' + userData.location}</p>
-                    <p>{'Bio: ' + userData.bio}</p>
+                    <h1>{'Profile: ' + otherUserData.username}</h1>
+                    <p>{'Name: ' + otherUserData.full_name}</p>
+                    <p>{'Location: ' + otherUserData.location}</p>
+                    <p>{'Bio: ' + otherUserData.bio}</p>
                     <button onClick={handleMessage}>Send Message</button>
 
                 </div>
@@ -28,7 +28,7 @@ const UserPopUp = ({userData, isVisible}) => {
             }
             {conversationVisible &&
                 <div>
-                    <SendMessage handleExit={handleExit}/>
+                    <SendMessage otherUserData={otherUserData} handleExit={handleExit} authHeader={authHeader}/>
                 </div>
             }
         </div>

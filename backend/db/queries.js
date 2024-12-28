@@ -55,8 +55,13 @@ async function updateBio(newBio, user_id) {
     await pool.query("UPDATE profiles SET bio = $1 WHERE user_id = $2", [newBio, user_id])
 }
 
-async function findOtherUsers(user_id) {  // returns data for other user cards
+async function findOtherUsers(user_id) {  // user & profile data for all users that are not user_id
     const result = await pool.query("SELECT user_id, username, full_name, location, bio FROM profiles INNER JOIN users ON user_id = id WHERE user_id != $1", [user_id])
+    return result.rows
+}
+
+async function findUserData(user_id) {   // user & profile data for user_id
+    const result= await pool.query("SELECT user_id, username, full_name, location, bio FROM profiles INNER JOIN users ON user_id = id WHERE user_id = $1", [user_id])
     return result.rows
 }
 
@@ -99,6 +104,7 @@ module.exports = {
     updateLocation,
     updateBio,
     findOtherUsers,
+    findUserData,
     findAllConversations,
     createConversation,
     appendMessage,

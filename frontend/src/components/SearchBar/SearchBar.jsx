@@ -4,7 +4,7 @@ import UserCard from '../UserCard/UserCard'
 
 import './SearchBar.css'
 
-const SearchBar = ({users}) => {
+const SearchBar = ({otherUsers, authHeader}) => {
     const [search, setSearch] = useState('')
     const [filteredUsers, setFilteredUsers] = useState(null)
 
@@ -12,9 +12,8 @@ const SearchBar = ({users}) => {
     const handleChange = (e) => {
         setSearch(e.target.value)
 
-        const usersFiltered = users.filter(userData => userData.username.toLowerCase().includes(e.target.value.toLowerCase()))
+        const usersFiltered = otherUsers.filter(otherUserData => otherUserData.username.toLowerCase().includes(e.target.value.toLowerCase()))
         setFilteredUsers(usersFiltered)
-        console.log(usersFiltered)
     }
     
     return (
@@ -27,11 +26,11 @@ const SearchBar = ({users}) => {
             />
             
             {search === '' ? (
-                users && users.length > 0 ? (
+                otherUsers && otherUsers.length > 0 ? (
                     <ul>
-                        {users.map((userData, index) => (
+                        {otherUsers.map((otherUserData, index) => (
                             <li key={index}>
-                                <UserCard userData={userData} />
+                                <UserCard otherUserData={otherUserData} authHeader={authHeader}/>
                             </li>
                         ))}
                     </ul>
@@ -41,9 +40,9 @@ const SearchBar = ({users}) => {
             ) : (
                 filteredUsers && filteredUsers.length > 0 ? (
                     <ul>
-                        {filteredUsers.map((userData, index) => (
+                        {filteredUsers.map((otherUserData, index) => (
                             <li key={index}>
-                                <UserCard userData={userData} />
+                                <UserCard otherUserData={otherUserData} />
                             </li>
                         ))}
                     </ul>

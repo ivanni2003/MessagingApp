@@ -77,10 +77,26 @@ async function getOtherUsers(req, res) {  // gets users other than requester
     }
 }
 
+async function getUserData(req, res) {
+    try {
+        const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)
+        if (!decodedToken.id) {
+            return response.status(401).json({ error: 'Invalid Token' })
+        }
+
+        const userData = await db.findUserData(req.params.user_id)
+        res.status(200).json({userData})
+        
+    } catch (error) {
+        res.status(400).send('Error fetching user data')
+    }
+}
+
 module.exports = {
     getUserProfile,
     updateUserName,
     updateUserLocation,
     updateUserBio,
-    getOtherUsers
+    getOtherUsers,
+    getUserData
 }

@@ -27,7 +27,7 @@ const Search = () => {
     return (
         <div>
           <h2>Search for other Users</h2>
-          <SearchBar users={otherUsers} />
+          <SearchBar otherUsers={otherUsers} authHeader={authHeader} />
         </div>
     )
 }

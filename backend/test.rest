@@ -1,8 +1,3 @@
-PATCH http://localhost:3000/api/conversations/sendMessage
+GET http://localhost:3000/api/profiles/other/14
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInVzZXJuYW1lIjoiUGljY29sbyIsImlhdCI6MTczNTQyMTM2MSwiZXhwIjoxNzM1NDI0OTYxfQ.ddRpSygTG1C532jNq-SAAG80HwBSUA1DEa3sO6Mu-5g
-
-{
-    "username": "Goku",
-    "message": "Special Beam Cannon!"
-}

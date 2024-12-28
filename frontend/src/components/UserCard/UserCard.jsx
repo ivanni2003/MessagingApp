@@ -4,14 +4,14 @@ import UserPopUp from '../UserPopUp/UserPopUp'
 
 import './UserCard.css'
 
-const UserCard = ({userData}) => {
+const UserCard = ({otherUserData, authHeader}) => {
     const [popUpVisible, setPopUpVisible] = useState(false)
 
     return (
         <div>
-            <p>{userData.username + ': ' + userData.full_name}</p>
-            <UserPopUp userData={userData} isVisible={popUpVisible} />
-            <button onClick={() => setPopUpVisible(!popUpVisible)}>View</button>
+            <p>{otherUserData.username + ': ' + otherUserData.full_name}</p>
+            <UserPopUp otherUserData={otherUserData} isVisible={popUpVisible} authHeader={authHeader}/>
+            <button onClick={() => setPopUpVisible(!popUpVisible)}>Toggle Profile</button>
         </div>
     )
 }
