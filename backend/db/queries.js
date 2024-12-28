@@ -59,6 +59,33 @@ async function findOtherUsers(user_id) {  // returns data for other user cards
     const result = await pool.query("SELECT user_id, username, full_name, location, bio FROM profiles INNER JOIN users ON user_id = id WHERE user_id != $1", [user_id])
     return result.rows
 }
+
+// conversations table
+async function findAllConversations(user_id) {  // all conversations of user
+    const result = await pool.query("SELECT * FROM conversations WHERE user_id1 = $1 OR user_id2 = $1", [user_id])
+    return result.rows
+}
+
+async function createConversation(user_id1, user_id2) {  // creates conversation (empty delete & conversations)
+    await pool.query("INSERT INTO conversations (user_id1, user_id2, deleted_by, messages) VALUES ($1, $2, '{}', '{}'::jsonb[])", [user_id1, user_id2])
+}
+
+async function appendMessage(sender_id, receiver_id, message) {    // sends message in existing conversation
+    const newMessage = {
+        sender: sender_id,
+        message: message
+    }
+    await pool.query("UPDATE conversations SET messages = array_append(messages, $1::jsonb) WHERE (user_id1 = $2 and user_id2 = $3) or (user_id1 = $3 and user_id2 = $2)", [JSON.stringify(newMessage), sender_id, receiver_id])
+}
+
+async function findConversation(user_id1, user_id2) {    
+    const result = await pool.query("SELECT * FROM conversations WHERE (user_id1 = $1 and user_id2 = $2) or (user_id1 = $2 and user_id2 = $1)", [user_id1, user_id2])
+    return result.rows
+}
+
+async function deleteConversation(user_id) {   // delete on one user's end
+
+}
   
 module.exports = {
     getTokenFromHeader,
@@ -71,5 +98,10 @@ module.exports = {
     updateName,
     updateLocation,
     updateBio,
-    findOtherUsers
+    findOtherUsers,
+    findAllConversations,
+    createConversation,
+    appendMessage,
+    findConversation,
+    deleteConversation
 };

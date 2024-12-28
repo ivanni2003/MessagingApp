@@ -1,3 +1,8 @@
-GET http://localhost:3000/api/profiles/other
+PATCH http://localhost:3000/api/conversations/sendMessage
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsInVzZXJuYW1lIjoiR2lueXUiLCJpYXQiOjE3MzUzMjMyMDgsImV4cCI6MTczNTMyNjgwOH0.Pal4QOJYvoiQUSX90EVh7YQokOi5REShqPntbLXtNW8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsInVzZXJuYW1lIjoiR2lueXUiLCJpYXQiOjE3MzU0MTQzNTIsImV4cCI6MTczNTQxNzk1Mn0.3JKoEfsB1OX8VH2PxWmH1UO47iN5I32rrInVbJDY048
+
+{
+    "username": "Piccolo",
+    "message": "Ginyu!"
+}
