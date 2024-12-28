@@ -1,8 +1,8 @@
 PATCH http://localhost:3000/api/conversations/sendMessage
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsInVzZXJuYW1lIjoiR2lueXUiLCJpYXQiOjE3MzU0MTQzNTIsImV4cCI6MTczNTQxNzk1Mn0.3JKoEfsB1OX8VH2PxWmH1UO47iN5I32rrInVbJDY048
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInVzZXJuYW1lIjoiUGljY29sbyIsImlhdCI6MTczNTQyMTM2MSwiZXhwIjoxNzM1NDI0OTYxfQ.ddRpSygTG1C532jNq-SAAG80HwBSUA1DEa3sO6Mu-5g
 
 {
-    "username": "Piccolo",
-    "message": "Ginyu!"
+    "username": "Goku",
+    "message": "Special Beam Cannon!"
 }

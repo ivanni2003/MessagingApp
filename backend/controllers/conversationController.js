@@ -33,7 +33,7 @@ async function createConversation(req, res) {
 async function sendMessage(req, res) {  // sends message & returns updated conversation
     try {
         const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)  // sender token
-        if (!decodedToken.id) {
+        if (!(decodedToken.id && decodedToken.username)) {
             return res.status(401).json({ error: 'Invalid Token' })
         }
         const otherUserObj = await db.findUser(req.body.username)  // receiver 
@@ -43,7 +43,7 @@ async function sendMessage(req, res) {  // sends message & returns updated conve
         if (conversation.length == 0) {  // create convo, if doesn't exist
             await db.createConversation(decodedToken.id, otherUserObj.id)
         }
-        await db.appendMessage(decodedToken.id, otherUserObj.id, req.body.message)
+        await db.appendMessage(decodedToken.username, decodedToken.id, otherUserObj.id, req.body.message)
 
         const updatedConversation = await db.findConversation(decodedToken.id, otherUserObj.id)
         res.status(200).json({updatedConversation})

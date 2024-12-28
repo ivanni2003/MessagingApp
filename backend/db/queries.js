@@ -70,12 +70,12 @@ async function createConversation(user_id1, user_id2) {  // creates conversation
     await pool.query("INSERT INTO conversations (user_id1, user_id2, deleted_by, messages) VALUES ($1, $2, '{}', '{}'::jsonb[])", [user_id1, user_id2])
 }
 
-async function appendMessage(sender_id, receiver_id, message) {    // sends message in existing conversation
+async function appendMessage(sender_name, user_id1, user_id2, message) {    // sends message in existing conversation
     const newMessage = {
-        sender: sender_id,
+        sender: sender_name,
         message: message
     }
-    await pool.query("UPDATE conversations SET messages = array_append(messages, $1::jsonb) WHERE (user_id1 = $2 and user_id2 = $3) or (user_id1 = $3 and user_id2 = $2)", [JSON.stringify(newMessage), sender_id, receiver_id])
+    await pool.query("UPDATE conversations SET messages = array_append(messages, $1::jsonb) WHERE (user_id1 = $2 and user_id2 = $3) or (user_id1 = $3 and user_id2 = $2)", [JSON.stringify(newMessage), user_id1, user_id2])
 }
 
 async function findConversation(user_id1, user_id2) {    
