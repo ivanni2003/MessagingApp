@@ -40,7 +40,10 @@ const SendMessage = ({otherUserData, handleExit, authHeader}) => {
                     />
                 <button type='submit'>Submit</button>
             </form>
-            <button onClick={handleExit}>Exit</button>
+            {handleExit && 
+                <button onClick={handleExit}>Exit</button>
+            }
+            
         </div>
     )
 }

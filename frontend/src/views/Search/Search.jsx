@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import axios from 'axios'
 
-import UserCard from '../../components/UserCard/UserCard'
 import SearchBar from '../../components/SearchBar/SearchBar'
 
 const baseURL = 'http://localhost:3000'
@@ -27,7 +26,7 @@ const Search = () => {
     return (
         <div>
           <h2>Search for other Users</h2>
-          <SearchBar otherUsers={otherUsers} authHeader={authHeader} />
+          <SearchBar otherUsers={otherUsers} authHeader={authHeader} handleConversationSelect={null}/>
         </div>
     )
 }

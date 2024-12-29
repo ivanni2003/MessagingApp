@@ -66,8 +66,8 @@ async function findUserData(user_id) {   // user & profile data for user_id
 }
 
 // conversations table
-async function findAllConversations(user_id) {  // all conversations of user
-    const result = await pool.query("SELECT * FROM conversations WHERE user_id1 = $1 OR user_id2 = $1", [user_id])
+async function findOtherUserInfoFromConversations(user_id) {  // all conversations of user
+    const result = await pool.query("SELECT DISTINCT id, username, full_name, location, bio FROM users INNER JOIN profiles ON id = user_id JOIN conversations ON user_id1 = $1 OR user_id2 = $1 WHERE id != $1", [user_id])
     return result.rows
 }
 
@@ -85,7 +85,7 @@ async function appendMessage(sender_name, user_id1, user_id2, message) {    // s
 
 async function findConversation(user_id1, user_id2) {    
     const result = await pool.query("SELECT * FROM conversations WHERE (user_id1 = $1 and user_id2 = $2) or (user_id1 = $2 and user_id2 = $1)", [user_id1, user_id2])
-    return result.rows
+    return result.rows[0]
 }
 
 async function deleteConversation(user_id) {   // delete on one user's end
@@ -105,7 +105,7 @@ module.exports = {
     updateBio,
     findOtherUsers,
     findUserData,
-    findAllConversations,
+    findOtherUserInfoFromConversations,
     createConversation,
     appendMessage,
     findConversation,

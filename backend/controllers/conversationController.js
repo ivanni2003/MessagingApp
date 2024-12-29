@@ -1,15 +1,15 @@
 const db = require("../db/queries");
 const jwt = require('jsonwebtoken')
 
-async function getAllConversations(req, res) {
+async function getProfilesFromConversations(req, res) {
     try {
         const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)
         if (!decodedToken.id) {
             return res.status(401).json({ error: 'Invalid Token' })
         }
 
-        const userConversations = await db.findAllConversations(decodedToken.id)
-        res.status(200).json({userConversations})
+        const otherProfiles = await db.findOtherUserInfoFromConversations(decodedToken.id)
+        res.status(200).json({otherProfiles})
     } catch (error) {
         res.status(400).send('Error getting user conversations')
     }
@@ -55,21 +55,21 @@ async function sendMessage(req, res) {  // sends message & returns updated conve
 
 async function getConversation(req, res) {
     try {
-        const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET) 
-        if (!decodedToken.id) {
+        const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)  // sender token
+        if (!(decodedToken.id && decodedToken.username)) {
             return res.status(401).json({ error: 'Invalid Token' })
         }
-        const otherUserObj = await db.findUser(req.body.username)  // find other user in conversation
+        const otherUserObj = await db.findUser(req.params.username)  // find other user in conversation
 
         const conversation = await db.findConversation(decodedToken.id, otherUserObj.id)
-        res.status(200).json({conversation})
+        res.status(200).json(conversation)
     } catch (error) {
         res.status(400).send('Error getting conversation')
     }
 }
 
 module.exports = {
-    getAllConversations,
+    getProfilesFromConversations,
     createConversation,
     sendMessage,
     getConversation

@@ -4,6 +4,7 @@ import axios from 'axios'
 
 import './Messages.css'
 import Conversation from '../Conversation/Conversation'
+import SearchBar from '../../components/SearchBar/SearchBar'
 
 
 const baseURL = 'http://localhost:3000'
@@ -11,37 +12,46 @@ const baseURL = 'http://localhost:3000'
 const Messages = () => {
     const {userData, authHeader} = useOutletContext()
     const [conversationVisible, setConversationVisible] = useState(false)
-    const [allConversations, setAllConversations] = useState(null)
+    const [otherUsersData, setOtherUsersData] = useState(null)
+    const [selectedConversation, setSelectedConversation] = useState(null)
+    const [selectedUserData, setSelectedUserData] = useState(null)
 
     useEffect(() => {
-        const fetchAllConversations = async () => {
+        const fetchConversationsAndSetOtherUsers = async () => {
             try {
-                const response = await axios.get(`${baseURL}/api/conversations/all`, authHeader)
-                setAllConversations(response.data)
-                console.log(response.data)
+                const response = await axios.get(`${baseURL}/api/conversations/other`, authHeader)
+                setOtherUsersData(response.data.otherProfiles)
             }
             catch (error) {
                 console.log(error)
             }
         }
-        fetchAllConversations()
+        fetchConversationsAndSetOtherUsers()
     }, [])
 
     const handleExit = () => {
         setConversationVisible(false)
     }
 
-    // Note: generate user card for every user_id conversing with current userData, using getUserData to get otherUserData parameter.
+    const handleConversationSelect = async (otherUserData) => {
+
+        console.log(otherUserData.username)
+        const response = await axios.get(`${baseURL}/api/conversations/specific/${otherUserData.username}`, authHeader)
+
+        setSelectedUserData(otherUserData)
+        setSelectedConversation(response.data)
+        setConversationVisible(true)
+    }
 
     return (
         <div>
             {!conversationVisible ? (
                 <div>
                     <h2>Messages</h2>
-                    <button onClick={() => setConversationVisible(true)}>View Message</button>
+                    <SearchBar otherUsers={otherUsersData} authHeader={authHeader} handleConversationSelect={handleConversationSelect}/>
                 </div>
             ) : (
-                <Conversation handleExit={handleExit}/>
+                <Conversation handleExit={handleExit} conversation={selectedConversation} otherUserData={selectedUserData} authHeader={authHeader}/>
             )}
         </div>
     )

@@ -21,13 +21,12 @@ async function createAccount(req, res) {
 
     db.createProfile(userObj.id)
 
-    res.status(201).send({userToken, username: userObj.username});
+    res.status(201).send({userToken, username: userObj.username, userID: userObj.id});
 }
 
 async function login(req, res) {
     try {
         const userObj = await db.findUser(req.body.username)
-
     if (!userObj) {  // wrong username
         return res.status(401).json({ error: 'Invalid username or password.' });
       }
@@ -45,7 +44,7 @@ async function login(req, res) {
 
     const userToken = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 3600 })
 
-    res.status(200).json({userToken, username: userObj.username})
+    res.status(200).json({userToken, username: userObj.username, userID: userObj.id})
     } catch (error) {
         res.status(400).send(error)
     }

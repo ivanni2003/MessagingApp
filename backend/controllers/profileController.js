@@ -85,7 +85,7 @@ async function getUserData(req, res) {
         }
 
         const userData = await db.findUserData(req.params.user_id)
-        res.status(200).json({userData})
+        res.status(200).json(userData)
         
     } catch (error) {
         res.status(400).send('Error fetching user data')

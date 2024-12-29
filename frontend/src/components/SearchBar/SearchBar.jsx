@@ -1,10 +1,11 @@
 import { useState } from 'react'
 
 import UserCard from '../UserCard/UserCard'
+import MessagesCard from '../MessagesCard/MessagesCard'
 
 import './SearchBar.css'
 
-const SearchBar = ({otherUsers, authHeader}) => {
+const SearchBar = ({otherUsers, authHeader, handleConversationSelect}) => {
     const [search, setSearch] = useState('')
     const [filteredUsers, setFilteredUsers] = useState(null)
 
@@ -28,11 +29,18 @@ const SearchBar = ({otherUsers, authHeader}) => {
             {search === '' ? (
                 otherUsers && otherUsers.length > 0 ? (
                     <ul>
-                        {otherUsers.map((otherUserData, index) => (
+                        {handleConversationSelect == null ? (otherUsers.map((otherUserData, index) => (
                             <li key={index}>
                                 <UserCard otherUserData={otherUserData} authHeader={authHeader}/>
                             </li>
-                        ))}
+                        ))) : (
+                            otherUsers.map((otherUserData, index) => (
+                                <li key={index}>
+                                    <MessagesCard otherUserData={otherUserData} authHeader={authHeader} handleConversationSelect={handleConversationSelect}/>
+                                </li>
+                            ))
+                        )
+                    }
                     </ul>
                 ) : (
                     <div>No Users Found</div>
@@ -40,11 +48,17 @@ const SearchBar = ({otherUsers, authHeader}) => {
             ) : (
                 filteredUsers && filteredUsers.length > 0 ? (
                     <ul>
-                        {filteredUsers.map((otherUserData, index) => (
+                        {handleConversationSelect == null ? (filteredUsers.map((otherUserData, index) => (
                             <li key={index}>
-                                <UserCard otherUserData={otherUserData} />
+                                <UserCard otherUserData={otherUserData} authHeader={authHeader}/>
                             </li>
-                        ))}
+                        )) ) : (
+                            filteredUsers.map((otherUserData, index) => (
+                                <li key={index}>
+                                    <MessagesCard otherUserData={otherUserData} authHeader={authHeader} handleConversationSelect={handleConversationSelect}/>
+                                </li>
+                            ))
+                        )}
                     </ul>
                 ) : (
                     <div>No Matching Users Found</div>

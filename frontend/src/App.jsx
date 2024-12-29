@@ -29,6 +29,7 @@ const App = () => {
   }, [])
 
   const handleLoginSuccess = (userObj) => {
+    console.log(userObj)
     setUserData(userObj)
 
     const authHeader = {
