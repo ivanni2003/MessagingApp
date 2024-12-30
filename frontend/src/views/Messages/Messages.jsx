@@ -10,7 +10,7 @@ import SearchBar from '../../components/SearchBar/SearchBar'
 const baseURL = 'http://localhost:3000'
 
 const Messages = () => {
-    const {userData, authHeader} = useOutletContext()
+    const {userData, authHeader, socket, activeUserIDs} = useOutletContext()
     const [conversationVisible, setConversationVisible] = useState(false)
     const [otherUsersData, setOtherUsersData] = useState(null)
     const [selectedConversation, setSelectedConversation] = useState(null)
@@ -48,10 +48,10 @@ const Messages = () => {
             {!conversationVisible ? (
                 <div>
                     <h2>Messages</h2>
-                    <SearchBar otherUsers={otherUsersData} authHeader={authHeader} handleConversationSelect={handleConversationSelect}/>
+                    <SearchBar otherUsers={otherUsersData} authHeader={authHeader} handleConversationSelect={handleConversationSelect} activeUserIDs={activeUserIDs}/>
                 </div>
             ) : (
-                <Conversation handleExit={handleExit} conversation={selectedConversation} otherUserData={selectedUserData} authHeader={authHeader}/>
+                <Conversation handleExit={handleExit} conversation={selectedConversation} otherUserData={selectedUserData} authHeader={authHeader} socket={socket}/>
             )}
         </div>
     )

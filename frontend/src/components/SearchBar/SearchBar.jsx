@@ -5,7 +5,7 @@ import MessagesCard from '../MessagesCard/MessagesCard'
 
 import './SearchBar.css'
 
-const SearchBar = ({otherUsers, authHeader, handleConversationSelect}) => {
+const SearchBar = ({otherUsers, authHeader, handleConversationSelect, activeUserIDs}) => {
     const [search, setSearch] = useState('')
     const [filteredUsers, setFilteredUsers] = useState(null)
 
@@ -31,12 +31,12 @@ const SearchBar = ({otherUsers, authHeader, handleConversationSelect}) => {
                     <ul>
                         {handleConversationSelect == null ? (otherUsers.map((otherUserData, index) => (
                             <li key={index}>
-                                <UserCard otherUserData={otherUserData} authHeader={authHeader}/>
+                                <UserCard otherUserData={otherUserData} authHeader={authHeader} activeUserIDs={activeUserIDs}/>
                             </li>
                         ))) : (
                             otherUsers.map((otherUserData, index) => (
                                 <li key={index}>
-                                    <MessagesCard otherUserData={otherUserData} authHeader={authHeader} handleConversationSelect={handleConversationSelect}/>
+                                    <MessagesCard otherUserData={otherUserData} authHeader={authHeader} handleConversationSelect={handleConversationSelect} activeUserIDs={activeUserIDs}/>
                                 </li>
                             ))
                         )

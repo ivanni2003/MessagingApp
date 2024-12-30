@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation, Outlet } from 'react-router-dom'
+
 import axios from 'axios'
 import './App.css'
+import { io } from 'socket.io-client'
 
 import Login from './components/Login/Login'
 import NavBar from './components/NavBar/NavBar'
@@ -11,6 +13,8 @@ const baseURL = 'http://localhost:3000'
 const App = () => {
   const [userData, setUserData] = useState(null)
   const [authHeader, setAuthHeader] = useState(null)
+  const [socket, setSocket] = useState(null)
+  const [activeUserIDs, setActiveUserIDs] = useState(null)
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -18,18 +22,31 @@ const App = () => {
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser')  // saving session
     if (loggedUser) {
-      const userData = JSON.parse(loggedUser)
-      setUserData(userData)
+      const userObj = JSON.parse(loggedUser)
+      setUserData(userObj)
 
       const authHeader = {
-        headers: { Authorization: 'Bearer ' + userData.userToken },
+        headers: { Authorization: 'Bearer ' + userObj.userToken },
       }
       setAuthHeader(authHeader)
+
+      if (authHeader && userObj) {
+        const userSocket = io(baseURL, {
+          query: {userID: userObj.userID}
+        })
+        userSocket.connect()
+
+        userSocket.on("getActiveUsers", (userIDs) => {
+          setActiveUserIDs(userIDs)
+        })
+
+        setSocket(userSocket)
+      }
+
     }
   }, [])
 
   const handleLoginSuccess = (userObj) => {
-    console.log(userObj)
     setUserData(userObj)
 
     const authHeader = {
@@ -39,6 +56,21 @@ const App = () => {
     window.localStorage.setItem(
       'loggedUser', JSON.stringify(userObj)
     )
+
+
+    if (authHeader) {
+      const userSocket = io(baseURL, {
+        query: {userID: userObj.userID}
+      })
+      userSocket.connect()
+
+      userSocket.on("getActiveUsers", (userIDs) => {
+        setActiveUserIDs(userIDs)
+   
+      })
+      setSocket(userSocket)
+    }
+
     navigate('/profile');
   }
 
@@ -46,6 +78,12 @@ const App = () => {
     window.localStorage.removeItem('loggedUser') 
     setUserData(null)
     setAuthHeader(null)
+
+    if (socket) {
+      socket.disconnect()
+    }
+    setSocket(null)
+
     navigate('/');
   }
 
@@ -59,6 +97,11 @@ const App = () => {
 
       setUserData(null)
       setAuthHeader(null)
+
+      if (socket) {
+        socket.disconnect()
+      }
+      setSocket(null)
 
       navigate('/');
 
@@ -76,7 +119,7 @@ const App = () => {
       ) : (
         <div>
           <NavBar handleLogout={handleLogout} handleDeleteAccount={handleDeleteAccount} />
-          <Outlet context={{userData, authHeader}}/> 
+          <Outlet context={{userData, authHeader, socket, activeUserIDs}}/> 
         </div>
       )}
     </div>

@@ -1,4 +1,5 @@
-const db = require("../db/queries");
+const db = require("../db/queries")
+const {getSocketID, io} = require ("../app.js")
 const jwt = require('jsonwebtoken')
 
 async function getProfilesFromConversations(req, res) {
@@ -39,6 +40,16 @@ async function sendMessage(req, res) {  // sends message & returns updated conve
         const otherUserObj = await db.findUser(req.body.username)  // receiver 
 
         const conversation = await db.findConversation(decodedToken.id, otherUserObj.id)
+
+        const receiverSocketID = getSocketID(otherUserObj.id)
+        if (receiverSocketID) {
+            const newMessage = {
+                sender: decodedToken.username,
+                message: req.body.message
+            }
+            io.to(receiverSocketID).emit("appendMessage", newMessage)
+            console.log('sent')
+        }
 
         if (conversation.length == 0) {  // create convo, if doesn't exist
             await db.createConversation(decodedToken.id, otherUserObj.id)

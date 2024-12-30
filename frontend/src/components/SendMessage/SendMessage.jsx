@@ -5,28 +5,17 @@ import './SendMessage.css'
 
 const baseURL = 'http://localhost:3000'
 
-const SendMessage = ({otherUserData, handleExit, authHeader}) => {
+const SendMessage = ({otherUserData, handleExit, authHeader, socke, handleSendMessage}) => {
     const [message, setMessage] = useState('')
 
     const handleChange = (e) => {
         setMessage(e.target.value)
     }
 
-    const handleSubmission = async (e) => {
+    const handleSubmission = (e) => {
         e.preventDefault()
-        console.log('send' + message)
-        try {
-            const reqData = {
-                username: otherUserData.username,  // username of recipient
-                message: message
-            }
-            await axios.patch(`${baseURL}/api/conversations/sendMessage`, reqData, authHeader)
-
-            alert("Message sent to " + otherUserData.username)
-        } catch (error) {
-            console.log(error)
-        }
-
+        handleSendMessage(message)
+    
     }
     return (
         <div>

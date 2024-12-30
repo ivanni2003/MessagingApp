@@ -7,7 +7,7 @@ import SearchBar from '../../components/SearchBar/SearchBar'
 const baseURL = 'http://localhost:3000'
 
 const Search = () => {
-    const {authHeader} = useOutletContext()
+    const {authHeader, activeUserIDs} = useOutletContext()
     const [otherUsers, setOtherUsers] = useState(null)
 
     useEffect(() => {
@@ -26,7 +26,7 @@ const Search = () => {
     return (
         <div>
           <h2>Search for other Users</h2>
-          <SearchBar otherUsers={otherUsers} authHeader={authHeader} handleConversationSelect={null}/>
+          <SearchBar otherUsers={otherUsers} authHeader={authHeader} handleConversationSelect={null} activeUserIDs={activeUserIDs}/>
         </div>
     )
 }
