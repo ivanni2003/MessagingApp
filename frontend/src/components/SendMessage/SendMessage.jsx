@@ -1,11 +1,9 @@
 import { useState } from 'react'
-
-import axios from 'axios'
 import './SendMessage.css'
 
 const baseURL = 'http://localhost:3000'
 
-const SendMessage = ({otherUserData, handleExit, authHeader, socke, handleSendMessage}) => {
+const SendMessage = ({handleSendMessage}) => {
     const [message, setMessage] = useState('')
 
     const handleChange = (e) => {
@@ -27,11 +25,8 @@ const SendMessage = ({otherUserData, handleExit, authHeader, socke, handleSendMe
                     onChange={handleChange}
                     placeholder={'Enter Message'}
                     />
-                <button type='submit'>Submit</button>
+                <button type='submit'>Send</button>
             </form>
-            {handleExit && 
-                <button onClick={handleExit}>Exit</button>
-            }
             
         </div>
     )

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 import './Messages.css'
-import Conversation from '../Conversation/Conversation'
+import Conversation from '../../components/Conversation/Conversation'
 import SearchBar from '../../components/SearchBar/SearchBar'
 
 
@@ -29,13 +29,11 @@ const Messages = () => {
         fetchConversationsAndSetOtherUsers()
     }, [])
 
-    const handleExit = () => {
+    const handleConversationExit = () => {
         setConversationVisible(false)
     }
 
     const handleConversationSelect = async (otherUserData) => {
-
-        console.log(otherUserData.username)
         const response = await axios.get(`${baseURL}/api/conversations/specific/${otherUserData.username}`, authHeader)
 
         setSelectedUserData(otherUserData)
@@ -44,15 +42,15 @@ const Messages = () => {
     }
 
     return (
-        <div>
-            {!conversationVisible ? (
-                <div>
-                    <h2>Messages</h2>
-                    <SearchBar otherUsers={otherUsersData} authHeader={authHeader} handleConversationSelect={handleConversationSelect} activeUserIDs={activeUserIDs}/>
-                </div>
-            ) : (
-                <Conversation handleExit={handleExit} conversation={selectedConversation} otherUserData={selectedUserData} authHeader={authHeader} socket={socket}/>
+        <div className='messages-container'>
+            <div className='messages-search-container'>
+                <SearchBar otherUsers={otherUsersData} authHeader={authHeader} handleConversationSelect={handleConversationSelect} activeUserIDs={activeUserIDs}/>
+            </div>
+            <div className='conversation-container'>
+                {conversationVisible && (
+                    <Conversation handleExit={handleConversationExit} conversation={selectedConversation} otherUserData={selectedUserData} authHeader={authHeader} socket={socket}/>
             )}
+            </div>
         </div>
     )
 }

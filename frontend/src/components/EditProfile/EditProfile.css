@@ -1,0 +1,6 @@
+.edit-profile-back-button {
+    font-size: clamp(8px, 2vw, 18px);
+    width: 16vw;
+    padding: .5vh;
+    margin: 5px;
+}

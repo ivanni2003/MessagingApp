@@ -1,0 +1,19 @@
+.edit-form-label {
+    text-align: left;
+    font-size: clamp(12px, 2vw, 24px);
+    margin: 5px;
+}
+
+.edit-form-input {
+    font-size: clamp(8px, 2vw, 18px);
+    width: 20vw;
+    height: 3vh;
+    margin: 6px;
+}
+
+.edit-form-button {
+    font-size: clamp(8px, 2vw, 18px);
+    width: 16vw;
+    padding: .5vh;
+    margin: 5px;
+}

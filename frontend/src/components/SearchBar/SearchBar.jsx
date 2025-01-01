@@ -1,11 +1,10 @@
 import { useState } from 'react'
 
 import UserCard from '../UserCard/UserCard'
-import MessagesCard from '../MessagesCard/MessagesCard'
 
 import './SearchBar.css'
 
-const SearchBar = ({otherUsers, authHeader, handleConversationSelect, activeUserIDs}) => {
+const SearchBar = ({otherUsers, handleConversationSelect, handleProfileSelect, activeUserIDs}) => {
     const [search, setSearch] = useState('')
     const [filteredUsers, setFilteredUsers] = useState(null)
 
@@ -20,6 +19,7 @@ const SearchBar = ({otherUsers, authHeader, handleConversationSelect, activeUser
     return (
         <div>
             <input
+                className='search-bar-input'
                 type="text"
                 value={search}
                 onChange={handleChange}
@@ -29,17 +29,16 @@ const SearchBar = ({otherUsers, authHeader, handleConversationSelect, activeUser
             {search === '' ? (
                 otherUsers && otherUsers.length > 0 ? (
                     <ul>
-                        {handleConversationSelect == null ? (otherUsers.map((otherUserData, index) => (
+                        {(otherUsers.map((otherUserData, index) => (
                             <li key={index}>
-                                <UserCard otherUserData={otherUserData} authHeader={authHeader} activeUserIDs={activeUserIDs}/>
+                                <UserCard 
+                                    otherUserData={otherUserData} 
+                                    activeUserIDs={activeUserIDs} 
+                                    handleConversationSelect={handleConversationSelect} 
+                                    handleProfileSelect={handleProfileSelect}
+                                />
                             </li>
-                        ))) : (
-                            otherUsers.map((otherUserData, index) => (
-                                <li key={index}>
-                                    <MessagesCard otherUserData={otherUserData} authHeader={authHeader} handleConversationSelect={handleConversationSelect} activeUserIDs={activeUserIDs}/>
-                                </li>
-                            ))
-                        )
+                        )))
                     }
                     </ul>
                 ) : (
@@ -48,17 +47,16 @@ const SearchBar = ({otherUsers, authHeader, handleConversationSelect, activeUser
             ) : (
                 filteredUsers && filteredUsers.length > 0 ? (
                     <ul>
-                        {handleConversationSelect == null ? (filteredUsers.map((otherUserData, index) => (
+                        {(filteredUsers.map((otherUserData, index) => (
                             <li key={index}>
-                                <UserCard otherUserData={otherUserData} authHeader={authHeader}/>
+                                <UserCard 
+                                    otherUserData={otherUserData} 
+                                    activeUserIDs={activeUserIDs} 
+                                    handleConversationSelect={handleConversationSelect} 
+                                    handleProfileSelect={handleProfileSelect}
+                                />
                             </li>
-                        )) ) : (
-                            filteredUsers.map((otherUserData, index) => (
-                                <li key={index}>
-                                    <MessagesCard otherUserData={otherUserData} authHeader={authHeader} handleConversationSelect={handleConversationSelect}/>
-                                </li>
-                            ))
-                        )}
+                        )))}
                     </ul>
                 ) : (
                     <div>No Matching Users Found</div>

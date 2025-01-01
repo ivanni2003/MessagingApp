@@ -1,0 +1,5 @@
+.search-bar-input {
+    font-size: clamp(8px, 2vw, 18px);
+    width: 27vw;
+    height: 3vh;
+}

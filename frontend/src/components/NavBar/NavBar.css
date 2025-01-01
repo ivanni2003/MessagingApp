@@ -1,0 +1,15 @@
+.nav-button {
+    font-size: clamp(10px, 2.5vw, 20px);
+    width: 32vw;
+    padding: .1vh;
+    margin: 0px;
+}
+
+.nav-bar-container {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    padding-top: 0px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid black;
+}

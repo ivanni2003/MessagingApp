@@ -113,13 +113,13 @@ const App = () => {
 
   return (
     <div>
-      <h1 className="main-header">Social Media App</h1>
+      <h1 className="main-header">Messaging App</h1>
       {!userData || location.pathname == '/' ? (
-        <Login handleLoginSuccess={handleLoginSuccess} />
+          <Login handleLoginSuccess={handleLoginSuccess} />   
       ) : (
         <div>
-          <NavBar handleLogout={handleLogout} handleDeleteAccount={handleDeleteAccount} />
-          <Outlet context={{userData, authHeader, socket, activeUserIDs}}/> 
+            <NavBar/>
+            <Outlet context={{userData, authHeader, socket, activeUserIDs, handleLogout, handleDeleteAccount}}/> 
         </div>
       )}
     </div>

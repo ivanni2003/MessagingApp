@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { useState } from "react"
 
+import './login.css'
+
 const baseURL = 'http://localhost:3000'
 
 const Login = ({handleLoginSuccess}) => {
@@ -47,38 +49,38 @@ const Login = ({handleLoginSuccess}) => {
     }
 
     return (
-      <div className='login-form'>
+      <div className='login-container'>
         <form>
           <div>
-            <label htmlFor="username">Username:
+            <div className='login-form-label'>
+              <label htmlFor="username">Username:</label>
+            </div>
                 <input
+                className='login-form-input'
                 type='text'
                 id="username"
                 value={username}
                 onChange={handleUsernameChange}
                 placeholder='Enter Username'
                 /> 
-            </label>
-
-          </div>
-          <div>
-            <label htmlFor="password">Password:
+            <div className='login-form-label'>
+              <label htmlFor="password">Password:</label>
+            </div>
                 <input
+                className='login-form-input'
                 type='password'
                 id="password"
                 value={password}
                 onChange={handlePasswordChange}
                 placeholder='Enter Password'
-                /> 
-            </label>
-         
-          </div>
-          <div>
-            <button onClick={handleRegister}>Register</button>
-          </div>
-          <div>
-            <button onClick={handleLogin}>Login</button>
-          </div>
+                />      
+          </div>  
+            <div>
+              <button className='login-form-button' onClick={handleLogin}>Login</button>
+            </div>
+            <div>
+              <button className='login-form-button' onClick={handleRegister}>Register</button>
+            </div>
         </form>
       </div>
     )

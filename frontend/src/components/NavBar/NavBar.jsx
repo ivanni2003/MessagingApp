@@ -1,16 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 
-const NavBar = ({handleLogout, handleDeleteAccount}) => {
+import './NavBar.css'
+const NavBar = () => {
 
     const navigate = useNavigate()
     return (
-        <div className='nav-options'>
-          <h2>NavBar</h2>
-          <button onClick={handleLogout}>Log Out</button>
-          <button onClick={handleDeleteAccount}>Delete Account</button>
-          <button onClick={() => navigate('/profile')}>Profile</button>
-          <button onClick={() => navigate('/messages')}>Messages</button>
-          <button onClick={() => navigate('/search')}>Search</button>
+        <div className='nav-bar-container'>
+          <button className='nav-button' onClick={() => navigate('/profile')}>Profile</button>
+          <button className='nav-button' onClick={() => navigate('/messages')}>Messages</button>
+          <button className='nav-button' onClick={() => navigate('/search')}>Search</button>
         </div>
     )
 }

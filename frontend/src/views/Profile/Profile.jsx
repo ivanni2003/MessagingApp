@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import './Profile.css'
 
-import EditProfile from '../../views/EditProfile/EditProfile'
+import EditProfile from '../../components/EditProfile/EditProfile'
 
 const baseURL = 'http://localhost:3000'
 
 const Profile = () => {
-    const {userData, authHeader} = useOutletContext()
+    const {userData, authHeader, handleLogout, handleDeleteAccount} = useOutletContext()
     const [fullName, setFullName] = useState('')
     const [location, setLocation] = useState('')
     const [bio, setBio] = useState('')
@@ -62,15 +62,19 @@ const Profile = () => {
 
 
     return (
-        <div>
+        <div className='profile-container'>
           {!editProfile ? (
             <div>
-              <h2>Your Profile: {userData.username}</h2>
+              <h2>{userData.username}</h2>
               <div>
                 <p>Name: {fullName}</p>
                 <p>Location: {location}</p>
                 <p>Bio: {bio}</p>
-                <button onClick={() => setEditProfile(true)}>Edit Profile</button>
+                <div className='profile-button-container'> 
+                  <button className='profile-button' onClick={() => setEditProfile(true)}>Edit Profile</button>
+                  <button className='profile-button' onClick={handleLogout}>Log Out</button>
+                  <button className='profile-button' onClick={handleDeleteAccount}>Delete Account</button>
+                </div>
               </div>
             </div>
           ) : (

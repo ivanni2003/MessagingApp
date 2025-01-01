@@ -13,16 +13,18 @@ const EditForm = ({handleEditSubmission, label}) => {
         e.preventDefault()
         handleEditSubmission(text)
     }
+
     return (
         <form onSubmit={handleSubmission}>
-            <label>{label}</label>
+            <label className='edit-form-label'>{label}</label>
             <input
+                className='edit-form-input'
                 type='text'
                 value={text}
                 onChange={handleTextChange}
-                placeholder={`Enter new ${label}`}
+                placeholder={`Enter new value`}
             />
-            <button type="submit">Submit</button>
+            <button className='edit-form-button' type="submit">Submit</button>
         </form>
     )
 

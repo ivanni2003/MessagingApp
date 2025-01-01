@@ -1,22 +1,22 @@
 import { useState } from 'react'
 
-import UserPopUp from '../UserPopUp/UserPopUp'
-
 import './UserCard.css'
 
-const UserCard = ({otherUserData, authHeader, activeUserIDs}) => {
-    const [popUpVisible, setPopUpVisible] = useState(false)
-
+const UserCard = ({otherUserData, activeUserIDs, handleConversationSelect, handleProfileSelect}) => {
     return (
-        <div>
+        <div className='user-card-container'>
             {activeUserIDs && activeUserIDs.includes(String(otherUserData.user_id)) ? (
-                <p><strong>{'Online:' + otherUserData.username + ': ' + otherUserData.full_name}</strong></p>
+                <p><strong>{otherUserData.username + ': ' + otherUserData.full_name}</strong></p>
             ) : (
                 <p>{otherUserData.username + ': ' + otherUserData.full_name}</p>
             )
             }
-            <UserPopUp otherUserData={otherUserData} isVisible={popUpVisible} authHeader={authHeader}/>
-            <button onClick={() => setPopUpVisible(!popUpVisible)}>Toggle Profile</button>
+            {handleConversationSelect && (
+                <button className='user-card-button' onClick={() => handleConversationSelect(otherUserData)}>Open</button>
+                ) }
+            {handleProfileSelect && (
+                <button className='user-card-button' onClick={() => handleProfileSelect(otherUserData)}>Toggle View</button>
+            )}
         </div>
     )
 }

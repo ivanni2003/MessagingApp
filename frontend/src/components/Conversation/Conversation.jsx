@@ -42,8 +42,7 @@ const Conversation = ({handleExit, conversation, otherUserData, authHeader, sock
 
     return (
         <div>
-            <h1>Conversation Here</h1>
-            <UserCard otherUserData={otherUserData} authHeader={authHeader} />
+            <UserCard otherUserData={otherUserData} authHeader={authHeader}/>
             <ul>
             {messages && messages.map((messageObj, index) => 
                 messageObj.sender == otherUserData.username ? (
@@ -54,8 +53,8 @@ const Conversation = ({handleExit, conversation, otherUserData, authHeader, sock
             )   
             }
             </ul>
-            <SendMessage otherUserData={otherUserData} authHeader={authHeader} socket={socket} handleSendMessage={handleSendMessage}/>
-            <button onClick={handleExitConvo}>Exit Convo</button>
+            <SendMessage handleSendMessage={handleSendMessage}/>
+            <button onClick={handleExitConvo}>Exit</button>
         </div>
     )
 }
