@@ -1,6 +1,6 @@
 .edit-form-label {
     text-align: left;
-    font-size: clamp(12px, 2vw, 24px);
+    font-size: clamp(18px, 2.4vw, 25px);
     margin: 5px;
 }
 

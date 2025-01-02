@@ -3,7 +3,7 @@
     justify-content: center;
     text-align: center;
     margin-top: 20px;
-    font-size: clamp(12px, 2.5vw, 24px);
+    font-size: clamp(18px, 2.4vw, 25px);
 }
 
 .profile-button-container {

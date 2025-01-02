@@ -1,6 +1,8 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
+
+import axios from 'axios'
+
 import './Profile.css'
 
 import EditProfile from '../../components/EditProfile/EditProfile'
@@ -41,6 +43,7 @@ const Profile = () => {
 
         alert('Name changed successfully')
     }
+
     const handleLocationChange = async (newLocation) => {
         const response = await axios.patch(`${baseURL}/api/profiles/update/location`, {newLocation}, authHeader)
         const newProfileData = response.data
@@ -49,6 +52,7 @@ const Profile = () => {
 
         alert('Location changed successfully')
     }
+
     const handleBioChange = async (newBio) => {
         const response = await axios.patch(`${baseURL}/api/profiles/update/bio`, {newBio}, authHeader)
         const newProfileData = response.data
@@ -57,9 +61,6 @@ const Profile = () => {
 
         alert('Bio changed successfully')
     }
-
-    const handleProfileReturn = () => setEditProfile(false)
-
 
     return (
         <div className='profile-container'>
@@ -82,9 +83,9 @@ const Profile = () => {
                 handleNameChange={handleNameChange} 
                 handleLocationChange={handleLocationChange} 
                 handleBioChange={handleBioChange} 
-                handleProfileReturn={handleProfileReturn}
+                handleProfileReturn={() => setEditProfile(false)}
                 userData={userData} 
-                authHeader={authHeader}/>
+              />
           )}
         </div>
     )

@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import './UserCard.css'
 
 const UserCard = ({otherUserData, activeUserIDs, handleConversationSelect, handleProfileSelect}) => {
@@ -12,10 +10,10 @@ const UserCard = ({otherUserData, activeUserIDs, handleConversationSelect, handl
             )
             }
             {handleConversationSelect && (
-                <button className='user-card-button' onClick={() => handleConversationSelect(otherUserData)}>Open</button>
+                <button onClick={() => handleConversationSelect(otherUserData)}>Open</button>
                 ) }
             {handleProfileSelect && (
-                <button className='user-card-button' onClick={() => handleProfileSelect(otherUserData)}>Toggle View</button>
+                <button onClick={() => handleProfileSelect(otherUserData)}>Toggle View</button>
             )}
         </div>
     )

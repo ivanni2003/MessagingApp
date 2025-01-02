@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-import UserCard from '../UserCard/UserCard'
-
 import './SearchBar.css'
+
+import UserCard from '../UserCard/UserCard'
 
 const SearchBar = ({otherUsers, handleConversationSelect, handleProfileSelect, activeUserIDs}) => {
     const [search, setSearch] = useState('')
@@ -17,7 +17,7 @@ const SearchBar = ({otherUsers, handleConversationSelect, handleProfileSelect, a
     }
     
     return (
-        <div>
+        <div className='search-bar-container'>
             <input
                 className='search-bar-input'
                 type="text"

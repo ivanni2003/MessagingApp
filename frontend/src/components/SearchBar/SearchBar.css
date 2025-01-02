@@ -1,5 +1,14 @@
 .search-bar-input {
     font-size: clamp(8px, 2vw, 18px);
-    width: 27vw;
+    width: 20vw;
     height: 3vh;
+}
+
+.search-bar-container {
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    width: 25vw;
+    height: 200vw;
+    border-right: 1px solid black;
 }

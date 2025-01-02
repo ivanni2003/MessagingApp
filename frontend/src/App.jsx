@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useLocation, Outlet } from 'react-router-dom'
 
 import axios from 'axios'
-import './App.css'
 import { io } from 'socket.io-client'
+
+import './App.css'
 
 import Login from './components/Login/Login'
 import NavBar from './components/NavBar/NavBar'
@@ -20,7 +21,7 @@ const App = () => {
   const location = useLocation()
 
   useEffect(() => {
-    const loggedUser = window.localStorage.getItem('loggedUser')  // saving session
+    const loggedUser = window.localStorage.getItem('loggedUser')  // preserved session
     if (loggedUser) {
       const userObj = JSON.parse(loggedUser)
       setUserData(userObj)

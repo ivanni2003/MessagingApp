@@ -1,0 +1,24 @@
+.conversation-container {
+    display: flex;
+    justify-content: right;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 65vw;
+    margin-left: 5px;
+    border: 1px solid black;
+}
+
+.message {
+    font-size: clamp(15px, 2.4vw, 24px);
+    width: 50vw;
+    height: 3vh;
+    border: 1px solid black;
+}
+.received-message {
+    text-align: left;
+}
+
+.sent-message {
+    text-align: right;
+}

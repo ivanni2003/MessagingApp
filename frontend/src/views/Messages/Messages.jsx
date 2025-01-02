@@ -1,8 +1,10 @@
 import { useOutletContext } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+
 import axios from 'axios'
 
 import './Messages.css'
+
 import Conversation from '../../components/Conversation/Conversation'
 import SearchBar from '../../components/SearchBar/SearchBar'
 
@@ -10,7 +12,7 @@ import SearchBar from '../../components/SearchBar/SearchBar'
 const baseURL = 'http://localhost:3000'
 
 const Messages = () => {
-    const {userData, authHeader, socket, activeUserIDs} = useOutletContext()
+    const {authHeader, socket, activeUserIDs} = useOutletContext()
     const [conversationVisible, setConversationVisible] = useState(false)
     const [otherUsersData, setOtherUsersData] = useState(null)
     const [selectedConversation, setSelectedConversation] = useState(null)
@@ -20,6 +22,7 @@ const Messages = () => {
         const fetchConversationsAndSetOtherUsers = async () => {
             try {
                 const response = await axios.get(`${baseURL}/api/conversations/other`, authHeader)
+                console.log(response.data.otherProfiles)
                 setOtherUsersData(response.data.otherProfiles)
             }
             catch (error) {
@@ -28,10 +31,6 @@ const Messages = () => {
         }
         fetchConversationsAndSetOtherUsers()
     }, [])
-
-    const handleConversationExit = () => {
-        setConversationVisible(false)
-    }
 
     const handleConversationSelect = async (otherUserData) => {
         const response = await axios.get(`${baseURL}/api/conversations/specific/${otherUserData.username}`, authHeader)
@@ -43,12 +42,23 @@ const Messages = () => {
 
     return (
         <div className='messages-container'>
-            <div className='messages-search-container'>
-                <SearchBar otherUsers={otherUsersData} authHeader={authHeader} handleConversationSelect={handleConversationSelect} activeUserIDs={activeUserIDs}/>
+            <div>
+                <SearchBar 
+                    otherUsers={otherUsersData} 
+                    authHeader={authHeader} 
+                    handleConversationSelect={handleConversationSelect} 
+                    activeUserIDs={activeUserIDs}
+                />
             </div>
-            <div className='conversation-container'>
+            <div>
                 {conversationVisible && (
-                    <Conversation handleExit={handleConversationExit} conversation={selectedConversation} otherUserData={selectedUserData} authHeader={authHeader} socket={socket}/>
+                    <Conversation 
+                        handleExit={() => setConversationVisible(false)} 
+                        conversation={selectedConversation} 
+                        otherUserData={selectedUserData} 
+                        authHeader={authHeader} 
+                        socket={socket}
+                    />
             )}
             </div>
         </div>

@@ -67,7 +67,7 @@ async function findUserData(user_id) {   // user & profile data for user_id
 
 // conversations table
 async function findOtherUserInfoFromConversations(user_id) {  // all conversations of user
-    const result = await pool.query("SELECT DISTINCT user_id, username, full_name, location, bio FROM users INNER JOIN profiles ON id = user_id JOIN conversations ON user_id1 = $1 OR user_id2 = $1 WHERE id != $1", [user_id])
+    const result = await pool.query("SELECT DISTINCT user_id, username, full_name, location, bio FROM users INNER JOIN profiles ON id = user_id INNER JOIN conversations ON (user_id1 = user_id OR user_id2 = user_id) WHERE user_id != $1 AND user_id1 = $1 OR user_id2 = $1", [user_id])
     return result.rows
 }
 

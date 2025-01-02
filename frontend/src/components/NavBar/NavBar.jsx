@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 
 import './NavBar.css'
-const NavBar = () => {
 
+const NavBar = () => {
     const navigate = useNavigate()
+
     return (
         <div className='nav-bar-container'>
           <button className='nav-button' onClick={() => navigate('/profile')}>Profile</button>

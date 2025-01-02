@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom'
 import axios from 'axios'
 
 import SearchBar from '../../components/SearchBar/SearchBar'
-import SendMessage from '../../components/SendMessage/SendMessage'
+import ProfilePopup from '../../components/ProfilePopup/ProfilePopup'
 
 import './Search.css'
 
@@ -39,21 +39,39 @@ const Search = () => {
         setProfileVisible(true)
     } 
 
+    const handleSendMessage = async (message) => {
+        console.log(message)
+        try {
+            const reqData = {
+                username: selectedUserData.username,  // username of recipient
+                message: message,
+                initial: true
+            }
+            console.log(reqData)
+            await axios.patch(`${baseURL}/api/conversations/sendMessage`, reqData, authHeader)
+            
+            alert("Message sent to " + selectedUserData.username)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div className='search-container'>
-          <SearchBar otherUsers={otherUsers} authHeader={authHeader} handleProfileSelect={handleProfileSelect} activeUserIDs={activeUserIDs}/>
-          <div className='profile-popup-container'>
-                {profileVisible && selectedUserData && (
-                    <div> 
-                    <h1>{selectedUserData.username}</h1>
-                    <p>{'Name: ' + selectedUserData.full_name}</p>
-                    <p>{'Location: ' + selectedUserData.location}</p>
-                    <p>{'Bio: ' + selectedUserData.bio}</p>
-                    <SendMessage selectedUserData={selectedUserData}/>
-                    <button onClick={handleProfileExit}>Exit</button>
-                </div>
-            )}
-            </div>
+          <SearchBar 
+            otherUsers={otherUsers} 
+            authHeader={authHeader} 
+            handleProfileSelect={handleProfileSelect} 
+            activeUserIDs={activeUserIDs}
+          />
+           {profileVisible && 
+                <ProfilePopup 
+                    otherUserData={selectedUserData} 
+                    handleSendMessage={handleSendMessage} 
+                    handleProfileExit={handleProfileExit} 
+                />
+           }
+          
         </div>
     )
 }

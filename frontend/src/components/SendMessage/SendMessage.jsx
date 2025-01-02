@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import './SendMessage.css'
 
-const baseURL = 'http://localhost:3000'
+import './SendMessage.css'
 
 const SendMessage = ({handleSendMessage}) => {
     const [message, setMessage] = useState('')
@@ -13,7 +12,6 @@ const SendMessage = ({handleSendMessage}) => {
     const handleSubmission = (e) => {
         e.preventDefault()
         handleSendMessage(message)
-    
     }
     return (
         <div>

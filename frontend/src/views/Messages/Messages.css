@@ -3,13 +3,3 @@
     justify-content: left;
     padding: 20px;
 }
-
-.messages-search-container {
-    display: flex;
-    justify-content: left;
-}
-
-.conversation-container {
-    display: flex;
-    justify-content: right;
-}

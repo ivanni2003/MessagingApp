@@ -2,8 +2,6 @@ import './Conversation.css'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import SendMessage from '../../components/SendMessage/SendMessage'
-import UserCard from '../../components/UserCard/UserCard'
-
 
 const baseURL = 'http://localhost:3000'
 
@@ -17,18 +15,16 @@ const Conversation = ({handleExit, conversation, otherUserData, authHeader, sock
             setMessages(newMessages)
         })
         
-    }, [])
+    }, [conversation])
 
-
-    const handleExitConvo = () => {
-        handleExit()
-    }
     
     const handleSendMessage = async (message) => {
+        console.log('message')
         try {
             const reqData = {
                 username: otherUserData.username,  // username of recipient
-                message: message
+                message: message,
+                initial: false
             }
             const newMessages = [...messages, reqData]
             setMessages(newMessages)
@@ -40,21 +36,30 @@ const Conversation = ({handleExit, conversation, otherUserData, authHeader, sock
         }
     }
 
+    const handleVideoCall = () => {
+        console.log('video call')
+    }
+
+
     return (
-        <div>
-            <UserCard otherUserData={otherUserData} authHeader={authHeader}/>
-            <ul>
-            {messages && messages.map((messageObj, index) => 
-                messageObj.sender == otherUserData.username ? (
-                    <li key={index}>{messageObj.message}</li>
-                ) : (
-                    <li key={index}><strong>{messageObj.message}</strong></li>
-                )
-            )   
-            }
-            </ul>
+        <div className='conversation-container'>
+            <div>
+                <h2>{otherUserData.username}</h2>
+                <button onClick={handleVideoCall}>Video Call</button>
+            </div>
+            <div>
+                <ul>
+                {messages && messages.map((messageObj, index) => 
+                    messageObj.sender == otherUserData.username ? (
+                        <li className='message received-message' key={index}>{messageObj.message}</li>
+                    ) : (
+                        <li className='message sent-message' key={index}><strong>{messageObj.message}</strong></li>
+                    )
+                )}
+                </ul>
+                </div>
             <SendMessage handleSendMessage={handleSendMessage}/>
-            <button onClick={handleExitConvo}>Exit</button>
+            <button onClick={handleExit}>Exit</button>
         </div>
     )
 }
