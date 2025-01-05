@@ -9,7 +9,7 @@ const ProfilePopup = ({otherUserData, handleSendMessage, handleProfileExit}) => 
             {otherUserData && (
                 <div> 
                     <h2>{otherUserData.username}</h2>
-                    <p>{'Name: ' + otherUserData.full_name}</p>
+                    <p>{'Name: ' + otherUserData.fullName}</p>
                     <p>{'Location: ' + otherUserData.location}</p>
                     <p>{'Bio: ' + otherUserData.bio}</p>
                     <SendMessage handleSendMessage={handleSendMessage}/>

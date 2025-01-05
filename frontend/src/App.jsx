@@ -33,7 +33,7 @@ const App = () => {
 
       if (authHeader && userObj) {
         const userSocket = io(baseURL, {
-          query: {userID: userObj.userID}
+          query: {userID: userObj.id}
         })
         userSocket.connect()
 
@@ -61,7 +61,7 @@ const App = () => {
 
     if (authHeader) {
       const userSocket = io(baseURL, {
-        query: {userID: userObj.userID}
+        query: {userID: userObj.id}
       })
       userSocket.connect()
 
@@ -90,7 +90,7 @@ const App = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      await axios.delete(`${baseURL}/api/users/delete/${userData.id}`)
+      await axios.delete(`${baseURL}/api/users/delete`, authHeader)
 
       alert('Account Deleted Successfully')
 

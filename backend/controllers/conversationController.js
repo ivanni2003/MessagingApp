@@ -1,14 +1,10 @@
 const db = require("../db/queries")
 const {getSocketID, io} = require ("../app.js")
-const jwt = require('jsonwebtoken')
 
 async function getProfilesFromConversations(req, res) {
     try {
-        const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)
-        if (!decodedToken.id) {
-            return res.status(401).json({ error: 'Invalid Token' })
-        }
-
+        const decodedToken = db.getDecodedTokenFromHeader(req)
+    
         const otherProfiles = await db.findOtherUserInfoFromConversations(decodedToken.id)
         res.status(200).json({otherProfiles})
     } catch (error) {
@@ -18,10 +14,8 @@ async function getProfilesFromConversations(req, res) {
 
 async function createConversation(req, res) {
     try {
-        const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET) 
-        if (!decodedToken.id) {
-            return res.status(401).json({ error: 'Invalid Token' })
-        }
+        const decodedToken = db.getDecodedTokenFromHeader(req)
+        
         const otherUserObj = await db.findUser(req.body.username)  // find other user for conversation
 
         await db.createConversation(decodedToken.id, otherUserObj.id)
@@ -33,10 +27,8 @@ async function createConversation(req, res) {
 
 async function sendMessage(req, res) {  // sends message & returns updated conversation
     try {
-        const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)  // sender token
-        if (!(decodedToken.id && decodedToken.username)) {
-            return res.status(401).json({ error: 'Invalid Token' })
-        }
+        const decodedToken = db.getDecodedTokenFromHeader(req)
+        
         const otherUserObj = await db.findUser(req.body.username)  // receiver 
 
         const conversation = await db.findConversation(decodedToken.id, otherUserObj.id)
@@ -45,17 +37,16 @@ async function sendMessage(req, res) {  // sends message & returns updated conve
             await db.createConversation(decodedToken.id, otherUserObj.id)
         }
   
-        if (!req.body.initial) {
-            const receiverSocketID = getSocketID(otherUserObj.id)
-            if (receiverSocketID) {
-                const newMessage = {
-                    sender: decodedToken.username,
-                    message: req.body.message
-                }
-                io.to(receiverSocketID).emit("appendMessage", newMessage)
-                console.log('sent')
+        // forward message to target client
+        const receiverSocketID = getSocketID(otherUserObj.id)
+        if (receiverSocketID) {
+            const newMessage = {
+                sender: decodedToken.username,
+                message: req.body.message
             }
+            io.to(receiverSocketID).emit("appendMessage", newMessage)
         }
+        
 
         await db.appendMessage(decodedToken.username, decodedToken.id, otherUserObj.id, req.body.message)
 
@@ -69,10 +60,8 @@ async function sendMessage(req, res) {  // sends message & returns updated conve
 
 async function getConversation(req, res) {
     try {
-        const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)  // sender token
-        if (!(decodedToken.id && decodedToken.username)) {
-            return res.status(401).json({ error: 'Invalid Token' })
-        }
+        const decodedToken = db.getDecodedTokenFromHeader(req)
+        
         const otherUserObj = await db.findUser(req.params.username)  // find other user in conversation
 
         const conversation = await db.findConversation(decodedToken.id, otherUserObj.id)

@@ -24,16 +24,13 @@ module.exports = {
 }
 
 io.on("connection", (socket) => {
-  console.log("User connected" + socket.id)
-
   const userID = socket.handshake.query.userID
-  console.log(userID)
+
   activeUserMap[userID] = socket.id
 
   io.emit("getActiveUsers", Object.keys(activeUserMap))
 
   socket.on("disconnect", () => {
-    console.log("User disconnected" + socket.id)
     delete activeUserMap[userID]
     io.emit("getActiveUsers", Object.keys(activeUserMap))
   })
@@ -54,5 +51,5 @@ app.use('/api/conversations', conversationRouter)
 const PORT = process.env.PORT
 
 server.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`)
+  console.log(`Running on ${PORT}`)
 })

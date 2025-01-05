@@ -24,6 +24,7 @@ const Messages = () => {
                 const response = await axios.get(`${baseURL}/api/conversations/other`, authHeader)
                 console.log(response.data.otherProfiles)
                 setOtherUsersData(response.data.otherProfiles)
+                console.log(response.data.otherProfiles)
             }
             catch (error) {
                 console.log(error)

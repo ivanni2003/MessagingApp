@@ -21,7 +21,7 @@ async function createAccount(req, res) {
 
     db.createProfile(userObj.id)
 
-    res.status(201).send({userToken, username: userObj.username, userID: userObj.id});
+    res.status(201).send({userToken, username: userObj.username, id: userObj.id});
 }
 
 async function login(req, res) {
@@ -31,7 +31,7 @@ async function login(req, res) {
         return res.status(401).json({ error: 'Invalid username or password.' });
       }
 
-    const correctPassword = await bcrypt.compare(req.body.password, userObj.password_hash)
+    const correctPassword = await bcrypt.compare(req.body.password, userObj.passwordHash)
 
     if (!(userObj && correctPassword)) {  // wrong password
         return res.status(401).json({ error: 'Invalid username or password.' })
@@ -44,7 +44,7 @@ async function login(req, res) {
 
     const userToken = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 3600 })
 
-    res.status(200).json({userToken, username: userObj.username, userID: userObj.id})
+    res.status(200).json({userToken, username: userObj.username, id: userObj.id})
     } catch (error) {
         res.status(400).send(error)
     }
@@ -53,13 +53,10 @@ async function login(req, res) {
 
 async function deleteAccount(req, res) {
     try {
-        const decodedToken = jwt.verify(db.getTokenFromHeader(req), process.env.SECRET)
-        if (!decodedToken.id) {
-            return response.status(401).json({ error: 'Invalid Token' })
-        }
-
-        await db.deleteUser(decodedToken.id)
+        const decodedToken = db.getDecodedTokenFromHeader(req)
+   
         await db.deleteProfile(decodedToken.id)
+        await db.deleteUser(decodedToken.id)
         res.status(201).send('Account Deleted')
     } catch (error) {
         res.status(400).send(error)

@@ -1,11 +1,17 @@
 const pool = require("./pool");
 
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
-function getTokenFromHeader(req) {
+function getDecodedTokenFromHeader(req) {  
     const authorization = req.get('authorization')
     if (authorization && authorization.startsWith('Bearer ')) {
-      return authorization.replace('Bearer ', '')
+        const decodedToken = jwt.verify(authorization.replace('Bearer ', ''), process.env.SECRET)
+        
+        if (!decodedToken.id || !decodedToken.username) {
+            return res.status(401).json({ error: 'Invalid Token' })
+        }
+        return decodedToken
     }
     return null
 }
@@ -13,7 +19,7 @@ function getTokenFromHeader(req) {
 // user table
 async function createUser(username, password) {
     const passwordHash = await bcrypt.hash(password, 10)
-    const result = await pool.query("INSERT INTO users (username, password_hash) VALUES ($1, $2) RETURNING id, username", [username, passwordHash])
+    const result = await pool.query(`INSERT INTO users (username, "passwordHash") VALUES ($1, $2) RETURNING id, username`, [username, passwordHash])
 
     return result.rows[0]
 }
@@ -29,71 +35,67 @@ async function deleteUser(id) {
 }
 
 // profile table
-async function createProfile(user_id) {
-    await pool.query("INSERT INTO profiles (user_id, full_name, location, bio) VALUES ($1, '', '', '')", [user_id])
+async function createProfile(userID) {
+    await pool.query(`INSERT INTO profiles ("userID", "fullName", location, bio) VALUES ($1, '', '', '')`, [userID])
 }
 
-async function deleteProfile(user_id) {
-    await pool.query("DELETE FROM profiles WHERE user_id = $1", [user_id])
+async function deleteProfile(userID) {
+    await pool.query(`DELETE FROM profiles WHERE "userID" = $1`, [userID])
 }
 
-async function getProfile(user_id) {   
-    const result = await pool.query("SELECT DISTINCT * FROM profiles WHERE user_id = $1", [user_id])
+async function getProfile(userID) {   
+    const result = await pool.query(`SELECT DISTINCT * FROM profiles WHERE "userID" = $1`, [userID])
 
     return result.rows[0]
 }
 
-async function updateName(newName, user_id) {  
-    await pool.query("UPDATE profiles SET full_name = $1 WHERE user_id = $2", [newName, user_id])
+async function updateName(newName, userID) {  
+    await pool.query(`UPDATE profiles SET "fullName" = $1 WHERE "userID" = $2`, [newName, userID])
 }
 
-async function updateLocation(newLocation, user_id) {    
-    await pool.query("UPDATE profiles SET location = $1 WHERE user_id = $2", [newLocation, user_id])
+async function updateLocation(newLocation, userID) {    
+    await pool.query(`UPDATE profiles SET location = $1 WHERE "userID" = $2`, [newLocation, userID])
 }
 
-async function updateBio(newBio, user_id) {   
-    await pool.query("UPDATE profiles SET bio = $1 WHERE user_id = $2", [newBio, user_id])
+async function updateBio(newBio, userID) {   
+    await pool.query(`UPDATE profiles SET bio = $1 WHERE "userID" = $2`, [newBio, userID])
 }
 
-async function findOtherUsers(user_id) {  // user & profile data for all users that are not user_id
-    const result = await pool.query("SELECT user_id, username, full_name, location, bio FROM profiles INNER JOIN users ON user_id = id WHERE user_id != $1", [user_id])
+async function findOtherUsers(userID) {  // user & profile data for all users that are not user_id
+    const result = await pool.query(`SELECT "userID", username, "fullName", location, bio FROM profiles INNER JOIN users ON "userID" = id WHERE "userID" != $1`, [userID])
     return result.rows
 }
 
-async function findUserData(user_id) {   // user & profile data for user_id
-    const result= await pool.query("SELECT user_id, username, full_name, location, bio FROM profiles INNER JOIN users ON user_id = id WHERE user_id = $1", [user_id])
+async function findUserData(userID) {   // user & profile data for user_id
+    const result= await pool.query(`SELECT "userID", username, "fullName", location, bio FROM profiles INNER JOIN users ON "userID" = id WHERE "userID" = $1`, [userID])
     return result.rows
 }
 
 // conversations table
-async function findOtherUserInfoFromConversations(user_id) {  // all conversations of user
-    const result = await pool.query("SELECT DISTINCT user_id, username, full_name, location, bio FROM users INNER JOIN profiles ON id = user_id INNER JOIN conversations ON (user_id1 = user_id OR user_id2 = user_id) WHERE user_id != $1 AND user_id1 = $1 OR user_id2 = $1", [user_id])
+async function findOtherUserInfoFromConversations(userID) {  // all conversations of user
+    const result = await pool.query(`SELECT DISTINCT "userID", username, "fullName", location, bio FROM users INNER JOIN profiles ON id = "userID" INNER JOIN conversations ON ("userID1" = "userID" OR "userID2" = "userID") WHERE ("userID" != $1) AND ("userID1" = $1 OR "userID2" = $1)`, [userID])
     return result.rows
 }
 
-async function createConversation(user_id1, user_id2) {  // creates conversation (empty delete & conversations)
-    await pool.query("INSERT INTO conversations (user_id1, user_id2, deleted_by, messages) VALUES ($1, $2, '{}', '{}'::jsonb[])", [user_id1, user_id2])
+async function createConversation(userID1, userID2) {  // creates conversation (empty delete & conversations)
+    await pool.query(`INSERT INTO conversations ("userID1", "userID2", messages) VALUES ($1, $2, '{}'::jsonb[])`, [userID1, userID2])
 }
 
-async function appendMessage(sender_name, user_id1, user_id2, message) {    // sends message in existing conversation
+async function appendMessage(senderName, userID1, userID2, message) {    // sends message in existing conversation
     const newMessage = {
-        sender: sender_name,
+        sender: senderName,
         message: message
     }
-    await pool.query("UPDATE conversations SET messages = array_append(messages, $1::jsonb) WHERE (user_id1 = $2 and user_id2 = $3) or (user_id1 = $3 and user_id2 = $2)", [JSON.stringify(newMessage), user_id1, user_id2])
+    await pool.query(`UPDATE conversations SET messages = array_append(messages, $1::jsonb) WHERE ("userID1" = $2 and "userID2" = $3) or ("userID1" = $3 and "userID2" = $2)`, [JSON.stringify(newMessage), userID1, userID2])
 }
 
-async function findConversation(user_id1, user_id2) {    
-    const result = await pool.query("SELECT * FROM conversations WHERE (user_id1 = $1 and user_id2 = $2) or (user_id1 = $2 and user_id2 = $1)", [user_id1, user_id2])
+async function findConversation(userID1, userID2) {    
+    const result = await pool.query(`SELECT * FROM conversations WHERE ("userID1" = $1 and "userID2" = $2) or ("userID1" = $2 and "userID2" = $1)`, [userID1, userID2])
     return result.rows[0]
-}
-
-async function deleteConversation(user_id) {   // delete on one user's end
-
 }
   
 module.exports = {
-    getTokenFromHeader,
+    getDecodedTokenFromHeader,
     createUser,
     findUser,
     deleteUser,
@@ -108,6 +110,5 @@ module.exports = {
     findOtherUserInfoFromConversations,
     createConversation,
     appendMessage,
-    findConversation,
-    deleteConversation
+    findConversation
 };

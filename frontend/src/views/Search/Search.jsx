@@ -44,8 +44,7 @@ const Search = () => {
         try {
             const reqData = {
                 username: selectedUserData.username,  // username of recipient
-                message: message,
-                initial: true
+                message: message
             }
             console.log(reqData)
             await axios.patch(`${baseURL}/api/conversations/sendMessage`, reqData, authHeader)

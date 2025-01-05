@@ -3,10 +3,10 @@ import './UserCard.css'
 const UserCard = ({otherUserData, activeUserIDs, handleConversationSelect, handleProfileSelect}) => {
     return (
         <div className='user-card-container'>
-            {activeUserIDs && activeUserIDs.includes(String(otherUserData.user_id)) ? (
-                <p><strong>{otherUserData.username + ': ' + otherUserData.full_name}</strong></p>
+            {activeUserIDs && activeUserIDs.includes(String(otherUserData.userID)) ? (
+                <p><strong>{otherUserData.username + ': ' + otherUserData.fullName}</strong></p>
             ) : (
-                <p>{otherUserData.username + ': ' + otherUserData.full_name}</p>
+                <p>{otherUserData.username + ': ' + otherUserData.fullName}</p>
             )
             }
             {handleConversationSelect && (
